@@ -11,6 +11,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
+// Binary digit
 const (
 	B  = 1
 	KB = 1024 * B
@@ -72,7 +73,7 @@ func CPUCheck(c *gin.Context) {
 	c.String(status, "\n"+message)
 }
 
-// RAMCheck checks the ram usage.
+// RAMCheck checks the disk usage.
 func RAMCheck(c *gin.Context) {
 	u, _ := mem.VirtualMemory()
 
