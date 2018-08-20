@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
-
-	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -25,7 +24,7 @@ func HealthCheck(c *gin.Context) {
 	c.String(http.StatusOK, "\n"+message)
 }
 
-// DiskCheck checks the cpu usage.
+// DiskCheck checks the disk usage.
 func DiskCheck(c *gin.Context) {
 	u, _ := disk.Usage("/")
 	usedMB := int(u.Used) / MB
@@ -73,7 +72,7 @@ func CPUCheck(c *gin.Context) {
 	c.String(status, "\n"+message)
 }
 
-// RAMCheck checks the disk usage.
+// RAMCheck checks the ram usage.
 func RAMCheck(c *gin.Context) {
 	u, _ := mem.VirtualMemory()
 

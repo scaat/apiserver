@@ -12,7 +12,7 @@ import (
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// MiddleWares.
 	g.Use(gin.Recovery())
-	// g.Use(middleware.NoCache)
+	g.Use(middleware.NoCache)
 	g.Use(middleware.Options)
 	g.Use(middleware.Secure)
 	g.Use(mw...)
