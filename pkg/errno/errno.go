@@ -20,7 +20,7 @@ type Err struct {
 }
 
 func (err *Err) Error() string {
-	return err.Message
+	return fmt.Sprintf("Err - code: %d, message: %s, error: %s", err.Code, err.Message, err.Err)
 }
 
 func New(errno *Errno, err error) *Err {
