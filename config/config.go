@@ -3,9 +3,9 @@ package config
 import (
 	"fmt"
 	"strings"
-
+	
 	"github.com/lexkong/log"
-
+	
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -20,18 +20,18 @@ func Init(cfg string) error {
 	c := Config{
 		Name: cfg,
 	}
-
+	
 	// 初始化配置文件
 	if err := c.initConfig(); err != nil {
 		return err
 	}
-
+	
 	// 初始化日志包
 	c.initLog()
-
+	
 	// 监控配置文件变化并热加载程序
 	c.watchConfig()
-
+	
 	return nil
 }
 
@@ -53,7 +53,7 @@ func (c *Config) initConfig() error {
 	// 将环境变量的Key中的'.'都替换为'_'
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
-
+	
 	if err := viper.ReadInConfig(); err != nil {
 		return err
 	}
@@ -71,9 +71,9 @@ func (c *Config) initLog() {
 		LogRotateSize:  viper.GetInt("log.log_rotate_size"),
 		LogBackupCount: viper.GetInt("log.log_backup_count"),
 	}
-
+	
 	fmt.Printf("%+v", passLagerCfg)
-
+	
 	log.InitWithConfig(&passLagerCfg)
 }
 

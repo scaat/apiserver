@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yilingfeng/apiserver/config"
 	"github.com/yilingfeng/apiserver/router"
+	"github.com/yilingfeng/apiserver/model"
 )
 
 var (
@@ -29,6 +30,10 @@ func main() {
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
+	
+	// init db
+	model.DB.Init()
+	defer model.DB.Close()
 
 	// Set gin mode.
 	gin.SetMode(viper.GetString("runmode"))
