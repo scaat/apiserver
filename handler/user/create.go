@@ -8,8 +8,8 @@ import (
 	"fmt"
 )
 
-func Create(c *gin.Context)  {
-	var r struct{
+func Create(c *gin.Context) {
+	var r struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}

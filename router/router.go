@@ -2,7 +2,7 @@ package router
 
 import (
 	"net/http"
-
+	
 	"github.com/gin-gonic/gin"
 	"github.com/yilingfeng/apiserver/handler/sd"
 	"github.com/yilingfeng/apiserver/router/middleware"
@@ -17,7 +17,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.Use(middleware.Options)
 	g.Use(middleware.Secure)
 	g.Use(mw...)
-
+	
 	// 404 Handler
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
@@ -27,7 +27,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	{
 		u.POST("", user.Create)
 	}
-
+	
 	svcd := g.Group("/sd")
 	{
 		svcd.GET("/health", sd.HealthCheck)
@@ -35,6 +35,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/cpu", sd.CPUCheck)
 		svcd.GET("/ram", sd.RAMCheck)
 	}
-
+	
 	return g
 }
