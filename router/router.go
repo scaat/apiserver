@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yilingfeng/apiserver/handler/sd"
 	"github.com/yilingfeng/apiserver/router/middleware"
+	"github.com/yilingfeng/apiserver/handler/user"
 )
 
 // Load loads the meddilewares, routes, handlers.
@@ -21,6 +22,11 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
+	
+	u := g.Group("/v1/user")
+	{
+		u.POST("", user.Create)
+	}
 
 	svcd := g.Group("/sd")
 	{
