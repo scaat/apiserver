@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yilingfeng/apiserver/pkg/errno"
 	"github.com/lexkong/log"
-	"fmt"
 	"github.com/lexkong/log/lager"
 	"github.com/yilingfeng/apiserver/util"
 )
