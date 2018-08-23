@@ -47,6 +47,7 @@ func Create(c *gin.Context) {
 	if r.Password == "" {
 		// err = fmt.Errorf("password is empty")
 		SendResponse(c, fmt.Errorf("password is empty"), nil)
+		return
 	}
 	
 	rsp := CreateResponse{
