@@ -7,6 +7,7 @@ import (
 	"github.com/lexkong/log"
 	"github.com/lexkong/log/lager"
 	"github.com/yilingfeng/apiserver/util"
+	"github.com/yilingfeng/apiserver/model"
 )
 
 // Create creates a new user account.
@@ -27,16 +28,39 @@ func Create(c *gin.Context) {
 		return
 	}
 	
-	admin := c.Param("username")
-	log.Infof("URL username: %s", admin)
+	user := model.UserModel{
+		Username: r.Username,
+		Password: r.Password,
+	}
 	
-	desc := c.Query("desc")
-	log.Infof("URL key param desc: %s", desc)
+	// Validate the data.
+	if err := user.Validate(); err != nil {
+		SendResponse(c, errno.ErrValidation, nil)
+		return
+	}
 	
-	contentType := c.GetHeader("Content-Type")
-	log.Infof("Header Content-Type: %s", contentType)
+	// Encrypt the user password.
+	if err := user.Encrypt(); err != nil {
+		SendResponse(c, errno.ErrEncrypt, nil)
+		return
+	}
 	
-	log.Debugf("username is: [%s], password is [%s]", r.Username, r.Password)
+	// Insert the user to the database.
+	if err := user.Create(); err != nil {
+		SendResponse(c, errno.ErrDatabase, nil)
+		return
+	}
+	
+	// admin := c.Param("username")
+	// log.Infof("URL username: %s", admin)
+	//
+	// desc := c.Query("desc")
+	// log.Infof("URL key param desc: %s", desc)
+	//
+	// contentType := c.GetHeader("Content-Type")
+	// log.Infof("Header Content-Type: %s", contentType)
+	
+	// log.Debugf("username is: [%s], password is [%s]", r.Username, r.Password)
 	
 	// if r.Username == "" {
 	// 	// err = errno.New(errno.ErrUserNotFound, fmt.Errorf("username can not found in db: xx.xx.xx.xx")).Add("This is add message.")
@@ -54,10 +78,10 @@ func Create(c *gin.Context) {
 	// 	SendResponse(c, fmt.Errorf("password is empty"), nil)
 	// 	return
 	// }
-	if err := r.checkParam(); err != nil {
-		SendResponse(c, err, nil)
-		return
-	}
+	// if err := r.checkParam(); err != nil {
+	// 	SendResponse(c, err, nil)
+	// 	return
+	// }
 	
 	rsp := CreateResponse{
 		Username: r.Username,
@@ -65,18 +89,20 @@ func Create(c *gin.Context) {
 	
 	// code, message := errno.DecodeErr(err)
 	// c.JSON(http.StatusOK, gin.H{"code": code, "message": message})
+	
+	// Show the user information.
 	SendResponse(c, nil, rsp)
 }
 
-func (r *CreateRequest) checkParam() error {
-	
-	if r.Username == "" {
-		return errno.New(errno.ErrValidation, nil).Add("username is empty.")
-	}
-	
-	if r.Password == "" {
-		return errno.New(errno.ErrValidation, nil).Add("password is empty.")
-	}
-	
-	return nil
-}
+// func (r *CreateRequest) checkParam() error {
+//
+// 	if r.Username == "" {
+// 		return errno.New(errno.ErrValidation, nil).Add("username is empty.")
+// 	}
+//
+// 	if r.Password == "" {
+// 		return errno.New(errno.ErrValidation, nil).Add("password is empty.")
+// 	}
+//
+// 	return nil
+// }
