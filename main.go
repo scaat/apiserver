@@ -16,6 +16,7 @@ import (
 	"github.com/yilingfeng/apiserver/config"
 	"github.com/yilingfeng/apiserver/router"
 	"github.com/yilingfeng/apiserver/model"
+	"github.com/yilingfeng/apiserver/router/middleware"
 )
 
 var (
@@ -42,7 +43,7 @@ func main() {
 	g := gin.New()
 	
 	// gin middlewares
-	middlewares := []gin.HandlerFunc{}
+	// middlewares := []gin.HandlerFunc{}
 	
 	// Routes
 	router.Load(
@@ -50,7 +51,9 @@ func main() {
 		g,
 		
 		// Middlwares.
-		middlewares...,
+		middleware.RequestID(),
+		middleware.Logging(),
+		// middlewares...,
 	)
 	
 	// Ping the server to make sure the router is working.
@@ -79,5 +82,5 @@ func pingServer() error {
 		log.Info("Waiting for the router, retry in 1 second.")
 		time.Sleep(time.Second)
 	}
-	return errors.New("Cannot connect to the router")
+	return errors.New("cannot connect to the router")
 }
