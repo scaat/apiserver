@@ -1,8 +1,8 @@
 package model
 
 import (
-	"time"
 	"sync"
+	"time"
 )
 
 type BaseModel struct {

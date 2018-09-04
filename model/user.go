@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/yilingfeng/apiserver/pkg/constvar"
 	"fmt"
-	"github.com/yilingfeng/apiserver/pkg/auth"
+
+	"github.com/scaat/apiserver/pkg/auth"
+	"github.com/scaat/apiserver/pkg/constvar"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -47,19 +48,19 @@ func ListUser(username string, offset, limit int) ([]*UserModel, uint64, error) 
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
-	
+
 	users := make([]*UserModel, 0)
 	var count uint64
-	
+
 	where := fmt.Sprintf("username like '%%%s%%'", username)
 	if err := DB.Self.Model(&UserModel{}).Where(where).Count(&count).Error; err != nil {
 		return users, count, err
 	}
-	
+
 	if err := DB.Self.Where(where).Offset(offset).Limit(limit).Order("id desc").Find(&users).Error; err != nil {
 		return users, count, err
 	}
-	
+
 	return users, count, nil
 }
 

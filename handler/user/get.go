@@ -1,10 +1,10 @@
 package user
 
 import (
-	. "github.com/yilingfeng/apiserver/handler"
-	"github.com/yilingfeng/apiserver/model"
 	"github.com/gin-gonic/gin"
-	"github.com/yilingfeng/apiserver/pkg/errno"
+	. "github.com/scaat/apiserver/handler"
+	"github.com/scaat/apiserver/model"
+	"github.com/scaat/apiserver/pkg/errno"
 )
 
 // Get gets an user by the user identifier.
@@ -16,6 +16,6 @@ func Get(c *gin.Context) {
 		SendResponse(c, errno.ErrUserNotFound, nil)
 		return
 	}
-	
+
 	SendResponse(c, nil, user)
 }

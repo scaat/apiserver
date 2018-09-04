@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/yilingfeng/apiserver/model"
+	"github.com/scaat/apiserver/model"
 )
 
 type CreateRequest struct {

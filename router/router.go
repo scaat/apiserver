@@ -2,11 +2,11 @@ package router
 
 import (
 	"net/http"
-	
+
 	"github.com/gin-gonic/gin"
-	"github.com/yilingfeng/apiserver/handler/sd"
-	"github.com/yilingfeng/apiserver/router/middleware"
-	"github.com/yilingfeng/apiserver/handler/user"
+	"github.com/scaat/apiserver/handler/sd"
+	"github.com/scaat/apiserver/handler/user"
+	"github.com/scaat/apiserver/router/middleware"
 )
 
 // Load loads the meddilewares, routes, handlers.
@@ -17,15 +17,15 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.Use(middleware.Options)
 	g.Use(middleware.Secure)
 	g.Use(mw...)
-	
+
 	// 404 Handler
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
-	
+
 	// api for authentication functionalities
 	g.POST("/login", user.Login)
-	
+
 	u := g.Group("/v1/user")
 	u.Use(middleware.AuthMiddleware())
 	{
@@ -35,7 +35,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.GET("", user.List)
 		u.GET("/:username", user.Get)
 	}
-	
+
 	svcd := g.Group("/sd")
 	{
 		svcd.GET("/health", sd.HealthCheck)
@@ -43,6 +43,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/cpu", sd.CPUCheck)
 		svcd.GET("/ram", sd.RAMCheck)
 	}
-	
+
 	return g
 }

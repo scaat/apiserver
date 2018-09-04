@@ -2,11 +2,12 @@ package token
 
 import (
 	"errors"
+	"fmt"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"fmt"
-	"time"
 )
 
 var (
@@ -27,7 +28,7 @@ func secretFunc(secret string) jwt.Keyfunc {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, jwt.ErrSignatureInvalid
 		}
-		
+
 		return []byte(secret), nil
 	}
 }
@@ -36,20 +37,20 @@ func secretFunc(secret string) jwt.Keyfunc {
 // and returns the context if the token was valid.
 func Parse(tokenString, secret string) (*Context, error) {
 	ctx := &Context{}
-	
+
 	// Parse the token.
 	token, err := jwt.Parse(tokenString, secretFunc(secret))
-	
+
 	// Parse error.
 	if err != nil {
 		return ctx, err
-		
+
 		// Read the token if it's valid.
 	} else if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		ctx.ID = uint64(claims["id"].(float64))
 		ctx.Username = claims["username"].(string)
 		return ctx, nil
-		
+
 		// 	Other errors.
 	} else {
 		return ctx, err
@@ -60,14 +61,14 @@ func Parse(tokenString, secret string) (*Context, error) {
 // pass it to the Parse function to parse the token.
 func ParseRequest(c *gin.Context) (*Context, error) {
 	header := c.Request.Header.Get("Authorization")
-	
+
 	// Load the jwt secret from config
 	secret := viper.GetString("jwt_secret")
-	
+
 	if len(header) == 0 {
 		return &Context{}, ErrMissingHeader
 	}
-	
+
 	var t string
 	// Parse the header to get the token part.
 	fmt.Sscanf(header, "Bearer %s", &t)
@@ -76,12 +77,12 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 
 // Sign signs the context with the specified secret.
 func Sign(ctx *gin.Context, c Context, secret string) (tokenString string, err error) {
-	
+
 	// Load the jwt secret from the Gin config if the secret isn't specified.
 	if secret == "" {
 		secret = viper.GetString("jwt_secret")
 	}
-	
+
 	// The token content.
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       c.ID,
@@ -89,8 +90,8 @@ func Sign(ctx *gin.Context, c Context, secret string) (tokenString string, err e
 		"nbf":      time.Now().Unix(),
 		"iat":      time.Now().Unix(),
 	})
-	
+
 	tokenString, err = token.SignedString([]byte(secret))
-	
+
 	return
 }

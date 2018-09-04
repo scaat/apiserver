@@ -2,12 +2,15 @@ package model
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	"github.com/lexkong/log"
 	"github.com/spf13/viper"
+
 	// MySQL driver.
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"os"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type Database struct {
@@ -60,9 +63,9 @@ func openDB(username, password, addr, name string) *gorm.DB {
 		log.Errorf(err, "Database connection failed. Database name: %s", name)
 		os.Exit(1)
 	}
-	
+
 	setupDB(db)
-	
+
 	return db
 }
 
@@ -71,7 +74,7 @@ func setupDB(db *gorm.DB) {
 	// 用于设置最大打开连接数，默认为0表示不限制。
 	// 设置最大连接数，可以避免并发太高导致连接mysql出现too many connections的错误。
 	// db.DB().SetMaxOpenConns(20000)
-	
+
 	// 用于设置闲置的连接数，设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
 	db.DB().SetMaxIdleConns(0)
 }

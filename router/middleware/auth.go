@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/yilingfeng/apiserver/pkg/token"
-	"github.com/yilingfeng/apiserver/handler"
-	"github.com/yilingfeng/apiserver/pkg/errno"
+	"github.com/scaat/apiserver/handler"
+	"github.com/scaat/apiserver/pkg/errno"
+	"github.com/scaat/apiserver/pkg/token"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -14,7 +14,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		
+
 		c.Next()
 	}
 }
