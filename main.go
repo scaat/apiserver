@@ -2,21 +2,17 @@ package main
 
 import (
 	"errors"
-
-	"github.com/lexkong/log"
-
 	"net/http"
 	"time"
 
-	"github.com/spf13/viper"
-
-	"github.com/spf13/pflag"
-
 	"github.com/gin-gonic/gin"
+	"github.com/lexkong/log"
 	"github.com/scaat/apiserver/config"
 	"github.com/scaat/apiserver/model"
 	"github.com/scaat/apiserver/router"
 	"github.com/scaat/apiserver/router/middleware"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 var (

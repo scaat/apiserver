@@ -2,14 +2,13 @@ package model
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/jinzhu/gorm"
 	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 
 	// MySQL driver.
-	"os"
-
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
