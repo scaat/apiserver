@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
 	"github.com/lexkong/log/lager"
-	. "github.com/scaat/apiserver/handler"
+	"github.com/scaat/apiserver/handler"
 	"github.com/scaat/apiserver/model"
 	"github.com/scaat/apiserver/pkg/errno"
 	"github.com/scaat/apiserver/util"
@@ -24,7 +24,7 @@ func Create(c *gin.Context) {
 
 	if err := c.Bind(&r); err != nil {
 		// c.JSON(http.StatusOK, gin.H{"error": errno.ErrBind})
-		SendResponse(c, errno.ErrBind, nil)
+		handler.SendResponse(c, errno.ErrBind, nil)
 		return
 	}
 
@@ -35,19 +35,19 @@ func Create(c *gin.Context) {
 
 	// Validate the data.
 	if err := user.Validate(); err != nil {
-		SendResponse(c, errno.ErrValidation, nil)
+		handler.SendResponse(c, errno.ErrValidation, nil)
 		return
 	}
 
 	// Encrypt the user password.
 	if err := user.Encrypt(); err != nil {
-		SendResponse(c, errno.ErrEncrypt, nil)
+		handler.SendResponse(c, errno.ErrEncrypt, nil)
 		return
 	}
 
 	// Insert the user to the database.
 	if err := user.Create(); err != nil {
-		SendResponse(c, errno.ErrDatabase, nil)
+		handler.SendResponse(c, errno.ErrDatabase, nil)
 		return
 	}
 
@@ -91,7 +91,7 @@ func Create(c *gin.Context) {
 	// c.JSON(http.StatusOK, gin.H{"code": code, "message": message})
 
 	// Show the user information.
-	SendResponse(c, nil, rsp)
+	handler.SendResponse(c, nil, rsp)
 }
 
 // func (r *CreateRequest) checkParam() error {

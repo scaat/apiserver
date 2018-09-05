@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	. "github.com/scaat/apiserver/handler"
+	"github.com/scaat/apiserver/handler"
 	"github.com/scaat/apiserver/model"
 	"github.com/scaat/apiserver/pkg/auth"
 	"github.com/scaat/apiserver/pkg/errno"
@@ -15,29 +15,29 @@ func Login(c *gin.Context) {
 	// Binding the data with the user struct.
 	var u model.UserModel
 	if err := c.Bind(&u); err != nil {
-		SendResponse(c, errno.ErrBind, nil)
+		handler.SendResponse(c, errno.ErrBind, nil)
 		return
 	}
 
 	// Get the user information by the login username.
 	db, err := model.GetUser(u.Username)
 	if err != nil {
-		SendResponse(c, errno.ErrUserNotFound, nil)
+		handler.SendResponse(c, errno.ErrUserNotFound, nil)
 		return
 	}
 
 	// Compare the login password with the user password.
 	if err := auth.Compare(db.Password, u.Password); err != nil {
-		SendResponse(c, errno.ErrPasswordIncorrect, nil)
+		handler.SendResponse(c, errno.ErrPasswordIncorrect, nil)
 		return
 	}
 
 	t, err := token.Sign(c, token.Context{ID: db.ID, Username: db.Username}, "")
 	if err != nil {
-		SendResponse(c, errno.ErrToken, nil)
+		handler.SendResponse(c, errno.ErrToken, nil)
 		return
 	}
 
-	SendResponse(c, nil, model.Token{Token: t})
+	handler.SendResponse(c, nil, model.Token{Token: t})
 
 }

@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	. "github.com/scaat/apiserver/handler"
+	"github.com/scaat/apiserver/handler"
 	"github.com/scaat/apiserver/model"
 	"github.com/scaat/apiserver/pkg/errno"
 )
@@ -14,10 +14,10 @@ func Delete(c *gin.Context) {
 	userID, _ := strconv.Atoi(c.Param("id"))
 
 	if err := model.DeleteUser(uint64(userID)); err != nil {
-		SendResponse(c, errno.ErrDatabase, nil)
+		handler.SendResponse(c, errno.ErrDatabase, nil)
 		return
 	}
 
-	SendResponse(c, nil, nil)
+	handler.SendResponse(c, nil, nil)
 
 }

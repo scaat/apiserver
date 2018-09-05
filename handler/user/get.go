@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	. "github.com/scaat/apiserver/handler"
+	"github.com/scaat/apiserver/handler"
 	"github.com/scaat/apiserver/model"
 	"github.com/scaat/apiserver/pkg/errno"
 )
@@ -13,9 +13,9 @@ func Get(c *gin.Context) {
 	// Get the user by the `username` from the database.
 	user, err := model.GetUser(username)
 	if err != nil {
-		SendResponse(c, errno.ErrUserNotFound, nil)
+		handler.SendResponse(c, errno.ErrUserNotFound, nil)
 		return
 	}
 
-	SendResponse(c, nil, user)
+	handler.SendResponse(c, nil, user)
 }
