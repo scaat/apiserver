@@ -28,3 +28,7 @@ docker_db:
   username: root
   password: qazxsw
 gormlog: true
+tls:
+  addr: :8081
+  cert: conf/server.crt
+  key: conf/server.key
